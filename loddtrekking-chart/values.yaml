@@ -1,0 +1,28 @@
+---
+# values.yaml
+replicaCount: 1
+image:
+  repository: homelab:30500/loddtrekking
+  pullPolicy: Always
+  tag: "latest"
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: #{}
+    traefik.ingress.kubernetes.io/router.middlewares: default-add-trailing-slash@kubernetescrd,default-strip-loddtrekking@kubernetescrd
+  hosts:
+    - host: homelab
+      paths:
+        - path: /loddtrekking
+          pathType: Prefix
+  tls: []
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

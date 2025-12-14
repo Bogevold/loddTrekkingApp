@@ -1,0 +1,156 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Loddtrekking v1.0</title>  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+  .valgt {
+    background-image: url(ball.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: green;
+    }
+  .normal {
+    background-color: white;
+    color: black;
+    }
+
+  .b76 {
+    width: 76px;
+  }
+  ul {
+    list-style-image: url('ball_liten.png');
+  }
+
+
+  td {
+    text-align: center;
+    }
+    
+  input {
+    width: 70px;
+  }
+
+</style>
+
+<script>
+  var ferdig = true;
+  var forste = true;
+  var varTimer;
+  var varTimer2;
+  var varLoddene = [];
+  var varVinnere = [];
+  var varTrukket = 0;
+  var antVinnere = 1;
+
+  function creTable() {
+    document.getElementById('Resultat').setAttribute('hidden', '');
+    var hentLodd = document.getElementById('antallLodd');
+    antLodd = hentLodd.value;
+    loddNr = 1;
+    var tblCont = document.getElementById('tblCont');
+    tblCont.innerHTML = "";
+    var tbl = document.createElement('table');
+    var tblB = document.createElement('tbody');
+    tbl.setAttribute('class', 'table-condensed');
+    for (var i = 0; i < antLodd/5; i++) {
+        var tr = document.createElement('tr');
+        for (var n = 0; n < 5; n++) {
+            var td = document.createElement('td');
+            td.appendChild(document.createTextNode(loddNr));
+            td.setAttribute('id', "loddNr"+loddNr++);
+            tr.appendChild(td);
+            
+        }
+        tblB.appendChild(tr);
+    }
+    tbl.appendChild(tblB);
+    tblCont.appendChild(tbl);
+    document.getElementById('divTrekk').removeAttribute('hidden');
+    document.getElementById('inVinnere').setAttribute('max', antLodd);
+  }
+  
+  function nullCeller() {
+    var celler = document.getElementsByTagName('td');
+    for (var i=0; i < celler.length; i++) {
+        celler[i].setAttribute('class', 'normal');
+        //console.log(celler[i].getAttribute('id'));
+    }
+  }
+  
+
+  function trekk() {
+    document.getElementById('Resultat').setAttribute('hidden', '');
+    varLoddene = Array.prototype.slice.call(document.getElementsByTagName('td'));
+    starTid = Date.now();
+    varVinnere = [];
+    varTrukket = 0;
+    antVinnere = document.getElementById('inVinnere').value;
+    varTimer = window.setInterval(velgLodd, 100);
+  }  
+
+  
+  function velgLodd() {
+    nullCeller();
+    var nr = Math.floor(Math.random() * varLoddene.length);
+    varLoddene[nr].setAttribute('class', 'valgt');
+    var varTid = Date.now() - starTid;
+    var varIntervall = document.getElementById('inTid').value * 1000/antVinnere;
+    console.log("Tid: " + varTid);
+    console.log("Intervall: " + varIntervall);
+    console.log("varTrukket: " + varTrukket);
+    if (varTid  > varIntervall*(1+varTrukket) ) {
+        varTrukket++;
+        varVinnere.push(varLoddene[nr]);
+        varLoddene.splice(nr,1);
+        if (antVinnere==varTrukket) {
+            window.clearInterval(varTimer);
+            nullCeller();
+            for (var n=0; n < varVinnere.length; n++) {
+                console.log(varVinnere[n].innerHTML);
+                varVinnere[n].setAttribute('class', 'valgt');
+            }
+            var res = document.getElementById('Resultat');
+            res.removeAttribute('hidden');
+            res.innerHTML = "<h1>Vinnerne er trukket</h1>";
+            var vinnereTxt = document.createElement('div');
+            var liste = document.createElement('ul');
+            for (var n = 0; n < varVinnere.length; n++) {
+              var vinnerLoddInn = varVinnere[n].childNodes[0].nodeValue;
+              console.log("Node value: " + vinnerLoddInn);
+              var punkt = document.createElement('li');
+              punkt.appendChild(document.createTextNode("Vinner nr " + (n+1) + " ble lodd nr: " + vinnerLoddInn));
+              liste.appendChild(punkt);
+            }
+            vinnereTxt.appendChild(liste);
+            res.appendChild(vinnereTxt);
+        }
+    }
+    
+  }
+  var starTid;
+</script>
+</head>
+
+<body>  
+  <div style="clear:left;">
+    <div id='divOppr' style="float:left;padding:5px;">
+        <button class='btn' onClick="creTable()">Opprett tabell</button>
+        <input type="number" id="antallLodd" min="5" max="5000" step="5" value="35">
+    </div>
+    <div id='divTrekk' hidden style="float:left; padding: 5px;">
+        <button class='btn b76'  onClick="trekk()">Trekk</button>
+        <input type="number" id="inTid" min="1" max="360" step="1" value="10"><br/>
+        Ant vinnere:
+        <input type="number" id="inVinnere" min="1" step="1" value="1">
+    </div>
+  </div>
+  <p/>
+  <div id="tblCont" style="clear:left;padding-left: 100px; padding-top:50px;"></div>
+  <div id="Resultat" hidden style="padding-left:50px;"></div>
+</body>
+
+</html> 

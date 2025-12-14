@@ -1,0 +1,74 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loddtrekking v1.0</title>  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./loddTrekking.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="./trekking.js"></script>
+
+</head>
+
+<body onLoad="creDivLodd()">  
+  <h1>Loddrekking</h1>
+
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Innstillinger</h3>
+        <span class="pull-right clickable panel-collapsed"><i class="glyphicon glyphicon-chevron-down"></i></span>
+      </div>
+      <div class="panel-body panel-collapse collapse">
+        <div id="divInnstillinger" >
+          <!--
+           <div class="input-group">    
+            <input type="number" class="form-control" id="antallRader" min="1" max="5000" step="1" value="7" aria-describedby="addonRad" onChange="fBeregn()">
+            <span class="input-group-addon" id="addonRad">Antall rader</span>
+          </div> 
+          <div class="input-group">    
+            <input type="number" class="form-control" id="antallKol" min="1" max="500" step="1" value="5" aria-describedby="addonKol"  onChange="fBeregn()">
+            <span class="input-group-addon" id="addonKol">Antall kolonner</span>
+          </div>   
+          -->
+          <div class="input-group">    
+            <select class="form-control" id="ddType" aria-describedby="addonType"  onChange="fStil(this)">
+              <option selected value="fotball">Fotball</option>
+              <option value="musikk">Musikk</option>
+              <option value="vin">Vin</option>
+              <option value="kake">Kake</option>
+            </select>
+            <span class="input-group-addon" id="addonType">Stil</span>
+          </div> 
+          <div class="input-group">    
+            <input type="number" class="form-control" id="antallLodd" value="35" aria-describedby="basic-addon1" onChange="fnyBeregn()">
+            <span class="input-group-addon" id="basic-addon1">Antall lodd</span>
+          </div>
+          <div class="input-group">    
+            <input type="number" class="form-control" id="inTid" min="1" max="360" step="1" value="10" onChange="fValider()" aria-describedby="basic-addon2">
+            <span class="input-group-addon" id="basic-addon2">Sekunder trekking foregår</span>
+          </div>
+          <div class="input-group">        
+            <input type="number" class="form-control" id="inVinnere" min="1" step="1" value="1" max="35"  onChange="fValider()" aria-describedby="basic-addon3">
+            <span class="input-group-addon" id="basic-addon3">Ant vinnere</span>
+          </div>
+        </div>
+      </div>    
+    </div>
+  </div>
+  
+  <div id="divTrekking" style="margin:auto; padding:50px;clear:left;">
+    <button class='btn b76' id="bTrekk" onClick="trekk()">Trekk</button>
+    <p/>
+    
+    <div id="Resultat" hidden style="margin:auto; clear:both; padding: 50px;"><h1>Vinnerne er trukket</h1></div>
+    
+	<div id="tblCont" ></div>    
+    
+  </div>
+</body>
+
+</html> 
+<!-- Buildt: sø. 14. des. 01:01:14 +0100 2025 -->

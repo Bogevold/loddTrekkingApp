@@ -1,0 +1,44 @@
+  .valgt {
+    background-image: url(./fotball_30x30.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: green;
+    }
+  .normal {
+    background-color: white;
+    color: black;
+    }
+
+  .b76 {
+    width: 76px;
+  }
+  ul.vinnere {
+    list-style-image: url('./fotball_12x12.png');
+  }
+
+
+  td {
+    text-align: center;
+    }
+    
+  .clickable {
+    cursor: pointer;
+  }
+  
+  .panel-heading span {
+    margin-top: -20px;
+    font-size: 15px;
+  }
+  
+  .lodd {
+    border-style: solid;
+    border-width: 1px;
+    padding: 5px;
+    width: 50px;
+    float:left;
+    text-align:center;
+  }
+
+  input:invalid {
+    border: 2px solid red;
+}
