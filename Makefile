@@ -34,7 +34,7 @@ version:
 build:
 	@echo "Bygger image versjon $(VERSION)..."
 	@echo "Oppdaterer versjon i HTML..."
-	sed -i.bak 's/<title>Loddtrekking v[0-9.]*<\/title>/<title>Loddtrekking v$(VERSION)<\/title>/' app/index.html
+	sed -i 's/<div class="version">v[0-9.]*<\/div>/<div class="version">v$(VERSION)<\/div>/' app/index.html
 	docker build -t $(REGISTRY)/$(IMAGE_NAME):$(VERSION) .
 	docker tag $(REGISTRY)/$(IMAGE_NAME):$(VERSION) $(REGISTRY)/$(IMAGE_NAME):latest
 	@echo "Image bygget: $(REGISTRY)/$(IMAGE_NAME):$(VERSION)"
@@ -90,13 +90,13 @@ clean:
 
 # Full workflow: bump versjon, bygg, push og oppgrader
 release-patch: bump-patch upgrade
-	@echo "Patch release fullført! Versjon: $(cat $(VERSION_FILE))"
+	@echo "Patch release fullført! Versjon: $$(cat $(VERSION_FILE))"
 
 release-minor: bump-minor upgrade
-	@echo "Minor release fullført! Versjon: $(cat $(VERSION_FILE))"
+	@echo "Minor release fullført! Versjon: $$(cat $(VERSION_FILE))"
 
 release-major: bump-major upgrade
-	@echo "Major release fullført! Versjon: $(cat $(VERSION_FILE))"
+	@echo "Major release fullført! Versjon: $$(cat $(VERSION_FILE))"
 
 # Push Git commits og tags til remote
 git-push:
