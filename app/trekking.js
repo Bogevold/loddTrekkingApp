@@ -10,6 +10,25 @@
   var vCol = 5;
   
   var vinnerListe;
+  var varNavn = {};
+
+  function saveNames() {
+    var antLodd = document.getElementById('antallLodd').value;
+    localStorage.setItem('loddNavn_' + antLodd, JSON.stringify(varNavn));
+  }
+
+  function loadNames() {
+    var antLodd = document.getElementById('antallLodd').value;
+    var data = localStorage.getItem('loddNavn_' + antLodd);
+    varNavn = data ? JSON.parse(data) : {};
+  }
+
+  function clearNames() {
+    var antLodd = document.getElementById('antallLodd').value;
+    localStorage.removeItem('loddNavn_' + antLodd);
+    varNavn = {};
+    creDivLodd();
+  }
 
   function creTable() {
     document.getElementById('Resultat').setAttribute('hidden', '');
@@ -45,12 +64,39 @@
     var tblCont = document.getElementById('tblCont');
     tblCont.style.maxWidth=maxBreddeLodd+"px";
     tblCont.innerHTML = "";
+    loadNames();
     for (var i = 0; i < antLodd; i++) {
+      var nr = loddNr++;
       var td = document.createElement('div');
-      td.appendChild(document.createTextNode(loddNr));
-      td.setAttribute('id', "loddNr"+loddNr++);
+      td.setAttribute('id', "loddNr"+nr);
+      td.setAttribute('data-nr', nr);
       td.classList.add('lodd');
-      tblCont.appendChild(td);            
+      if (varNavn[nr]) {
+        td.classList.add('solgt');
+        td.textContent = varNavn[nr].length > 6 ? varNavn[nr].substring(0,6) + '..' : varNavn[nr];
+        td.title = varNavn[nr] + ' (lodd ' + nr + ')';
+      } else {
+        td.textContent = nr;
+      }
+      td.addEventListener('click', function() {
+        var loddNum = this.getAttribute('data-nr');
+        var eksNavn = varNavn[loddNum] || '';
+        var navn = prompt('Navn for lodd ' + loddNum + ':', eksNavn);
+        if (navn === null) return;
+        if (navn.trim() === '') {
+          delete varNavn[loddNum];
+          this.classList.remove('solgt');
+          this.textContent = loddNum;
+          this.title = '';
+        } else {
+          varNavn[loddNum] = navn.trim();
+          this.classList.add('solgt');
+          this.textContent = navn.trim().length > 6 ? navn.trim().substring(0,6) + '..' : navn.trim();
+          this.title = navn.trim() + ' (lodd ' + loddNum + ')';
+        }
+        saveNames();
+      });
+      tblCont.appendChild(td);
     }
     document.getElementById('inVinnere').setAttribute('max', antLodd);
   }  
@@ -106,11 +152,18 @@
         window.clearInterval(varTimer);
       }
             
-      var vinnerLoddInn = varVinnere[varVinnere.length - 1].childNodes[0].nodeValue;
+      var vinnerEl = varVinnere[varVinnere.length - 1];
+      var vinnerLoddInn = vinnerEl.getAttribute('data-nr');
       console.log("Node value: " + vinnerLoddInn);
 
-      var punkt = document.createElement('li');      
-      punkt.appendChild(document.createTextNode("Vinner nr " + (varVinnere.length) + " ble lodd nr: " + vinnerLoddInn));
+      var vinnerTekst;
+      if (varNavn[vinnerLoddInn]) {
+        vinnerTekst = "Vinner nr " + (varVinnere.length) + ": " + varNavn[vinnerLoddInn] + " (lodd nr " + vinnerLoddInn + ")";
+      } else {
+        vinnerTekst = "Vinner nr " + (varVinnere.length) + " ble lodd nr: " + vinnerLoddInn;
+      }
+      var punkt = document.createElement('li');
+      punkt.appendChild(document.createTextNode(vinnerTekst));
 
       if (varTrukket == 1) {
         var res = document.getElementById('Resultat');
