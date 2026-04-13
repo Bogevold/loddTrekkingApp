@@ -37,6 +37,11 @@
     width: 50px;
     float:left;
     text-align:center;
+    cursor: pointer;
+  }
+
+  .solgt {
+    background-color: #c8e6c9;
   }
 
   input:invalid {
